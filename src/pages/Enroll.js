@@ -26,7 +26,9 @@ export default function Enroll(){
     const [parent, setParent] = useState("");
     const [parentNumber, setParentNumber] = useState("");
     const [selectGrade, setSelectGrade] = useState(12);
-    console.log(parentNumber);
+    console.log(fullName);
+
+
 
     useEffect(() => {
         if (selectGrade === 0) {
@@ -43,10 +45,8 @@ export default function Enroll(){
     function enroll(e){
         e.preventDefault();
 
-        if(firstName === "" || middleName === "" || lastName === "" || middleName === "" || middleName === "" || middleName === "" || middleName === ""){
-
-        }
-
+        if(firstName === "" || middleName === "" || lastName === "" || fullName === "" || DOB === "" || address === "" || mobileNumber === "" || socialMedia === "" || presentSchool === "" || parent === "" || parentNumber === "" || selectGrade === ""){
+            
         fetch("https://one-saga.onrender.com/enrollment/enroll",{
             method: "POST",
             headers:{
@@ -54,7 +54,9 @@ export default function Enroll(){
             },
             body: JSON.stringify({
                 studentStatus: studentStatus,
-                fullName: `${firstName, middleName, lastName}`,
+                firstName: firstName,
+                middleName: firstName,
+                lastName: firstName,
                 lrn: LRN,
                 birthDate: DOB,
                 address: address,
@@ -103,6 +105,14 @@ export default function Enroll(){
 
             }
         })
+        }else{
+            Swal.fire({
+                title: "PLEASE FILL ALL REQUIRED FIELDS",
+                icon: "error",
+                text: "We never share your information to anyone else."
+            });
+        }
+
     }
 
 
@@ -146,7 +156,7 @@ export default function Enroll(){
 
                     <TextField size="small" className="my-1 w-100" id="outlined-basic" label="First Name" variant="outlined" type="text" required onChange={e => setFirstName(e.target.value)}/>
 
-                    <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Middle Name" variant="outlined" type="text" required onChange={e => setMiddleName(e.target.value)}/>
+                    <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Middle Name" variant="outlined" type="text"  onChange={e => setMiddleName(e.target.value)}/>
 
                     <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Last Name" variant="outlined" type="text" required onChange={e => setLastName(e.target.value)}/>
                     
