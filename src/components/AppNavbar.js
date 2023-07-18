@@ -1,8 +1,19 @@
-import {Nav, Navbar, Container, Button, Image} from "react-bootstrap"
+import {Nav, Navbar, Container, Button, Image, NavDropdown} from "react-bootstrap"
 import Logo from "../images/logo.png"
 import { NavLink } from "react-router-dom";
+import  secureLocalStorage  from  "react-secure-storage";
+
+import { useContext } from "react"
+import UserContext from "../UserContext";
+
 
 export default function AppNavbar(){
+
+  const { user } = useContext(UserContext);
+  const userFullName = `${secureLocalStorage.getItem("firstName")} ${secureLocalStorage.getItem("middleName")} ${secureLocalStorage.getItem("lastName")}`
+  console.log(userFullName);
+
+
     return(
     <Navbar bg="dark" sticky="top" data-bs-theme="dark" expand="lg" className="navbar nav-btm-border p-2 shadow nav-btm-border ">
       <Container className="container-fluid ">
@@ -13,9 +24,46 @@ export default function AppNavbar(){
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             <Nav.Link as={ NavLink } to="/">Home</Nav.Link>
-            <Nav.Link as={ NavLink } to="/about">About</Nav.Link>
-            <Button as={ NavLink } to="/enrollment" variant="outline-warning" className="mx-lg-2 mx-0 px-5">ENROLL</Button>
-            <Button as={ NavLink } to="/login" variant="outline-primary" className="mx-lg-1 mx-0 px-5 mt-1 mt-lg-0">LOGIN</Button>
+            {
+              secureLocalStorage.getItem("id") == null ?
+              <>
+              <Nav.Link as={ NavLink } to="/about">About</Nav.Link>
+              <Button as={ NavLink } to="/enrollment" variant="outline-warning" className="mx-lg-2 mx-0 px-5">ENROLL</Button>
+              <Button as={ NavLink } to="/login" variant="outline-primary" className="mx-lg-1 mx-0 px-5 mt-1 mt-lg-0">LOGIN</Button>
+              </>
+              :
+              <>
+              {
+                secureLocalStorage.getItem("isAdmin") == true ?
+                <>
+                <Nav.Link as={ NavLink } to="/dashboard">Dashboard</Nav.Link>
+                <Nav.Link as={ NavLink } to="/admission">Admission</Nav.Link>
+                <NavDropdown title="Assessment" id="navbarScrollingDropdown">
+                  <NavDropdown.Item as={ NavLink } to="/academic-assessment">Academic Assessment</NavDropdown.Item>
+                  <NavDropdown.Item as={ NavLink } to="/financial-assessment">Financial Assessment</NavDropdown.Item>
+                </NavDropdown>
+                <Nav.Link as={ NavLink } to="/final-verification">Verification</Nav.Link>
+
+                <NavDropdown className="bg-secondary rounded px-2" title={userFullName} id="navbarScrollingDropdown">
+                  <NavDropdown.Item as={ NavLink } to="/profile">Profile Settings</NavDropdown.Item>
+                  <NavDropdown.Item as={ NavLink } to="/tools">Tools</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={ NavLink } to="/logout">Logout</NavDropdown.Item>
+                </NavDropdown>
+                </>
+                :
+                <>
+                <Nav.Link as={ NavLink } to="/admission">Admission</Nav.Link>
+                <NavDropdown className="bg-secondary rounded px-2" title={userFullName} id="navbarScrollingDropdown">
+                  <NavDropdown.Item as={ NavLink } to="/profile">Profile Settings</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item as={ NavLink } to="/logout">Logout</NavDropdown.Item>
+                </NavDropdown>
+                </>
+              }
+              </>
+            }
+            
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -3,15 +3,17 @@ import {Box, TextField, RadioGroup, Radio, FormControlLabel, FormLabel, FormCont
 import {InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
 import React from "react";
 import Logo from "../images/logo.png";
-import { useState, useEffect, navigate } from "react";
+import { useState, useEffect } from "react";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2"
 import Banner from "../components/Banner.js"
 
 export default function Enroll(){
     const formRef = React.useRef();
+    const navigate = useNavigate();
 
     const [isKinder, setKinder] = useState(false);
-    const [studentStatus, setStudentStatus] = useState("");
+    const [studentStatus, setStudentStatus] = useState("NEW");
     const [firstName, setFirstName] = useState("");
     const [middleName, setMiddleName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -25,7 +27,8 @@ export default function Enroll(){
     const [presentSchool, setPresentSchool] = useState("");
     const [parent, setParent] = useState("");
     const [parentNumber, setParentNumber] = useState("");
-    const [selectGrade, setSelectGrade] = useState(12);
+    const [medicalCondition, setMedicalCondition] = useState("");
+    const [selectGrade, setSelectGrade] = useState("");
     console.log(fullName);
 
 
@@ -45,9 +48,17 @@ export default function Enroll(){
     function enroll(e){
         e.preventDefault();
 
-        if(firstName === "" || middleName === "" || lastName === "" || fullName === "" || DOB === "" || address === "" || mobileNumber === "" || socialMedia === "" || presentSchool === "" || parent === "" || parentNumber === "" || selectGrade === ""){
-            
-        fetch("https://one-saga.onrender.com/enrollment/enroll",{
+        if(firstName === "" || lastName === "" || DOB === "" || address === "" || mobileNumber === "" || socialMedia === "" || presentSchool === "" || parent === "" || parentNumber === "" || selectGrade === ""){
+        
+            Swal.fire({
+                title: "PLEASE FILL ALL REQUIRED FIELDS",
+                icon: "error",
+                text: "We never share your information to anyone else."
+            });
+        
+        }else{
+
+            fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/enrollment/enroll`,{
             method: "POST",
             headers:{
                 "Content-Type": "application/json"
@@ -55,8 +66,8 @@ export default function Enroll(){
             body: JSON.stringify({
                 studentStatus: studentStatus,
                 firstName: firstName,
-                middleName: firstName,
-                lastName: firstName,
+                middleName: middleName,
+                lastName: lastName,
                 lrn: LRN,
                 birthDate: DOB,
                 address: address,
@@ -65,6 +76,7 @@ export default function Enroll(){
                 gradeLevelToEnroll: selectGrade,
                 strandToEnroll: strand,
                 presentSchool: presentSchool,
+                medicalCondition: medicalCondition,
                 parentFullName: parent,
                 parentMobileNumber: parentNumber,
             })
@@ -79,13 +91,23 @@ export default function Enroll(){
                     icon: "success",
                     text: "Please complete your enrollment at St. Aloysius Gonzaga Academy in Santo Tomas San Luis Pampanga."
                 });
-                // setFName('');
-                // setLName('');
-                // setEmail('');
-                // setMobileNo('');
-                // setPassword1('');
-                // setPassword2('');
-                // navigate("/home");
+                setKinder(false);
+                setStudentStatus("NEW");
+                setFirstName("");
+                setMiddleName("");
+                setLastName("");
+                setFullName("");
+                setDOB("");
+                setAddress("");
+                setMobileNumber("");
+                setSocialMedia("");
+                setStrand("");
+                setLRN("");
+                setPresentSchool("");
+                setParent("");
+                setParentNumber("");
+                setMedicalCondition("");
+                setSelectGrade("");
             }
             else if (data == "2"){
 
@@ -105,12 +127,8 @@ export default function Enroll(){
 
             }
         })
-        }else{
-            Swal.fire({
-                title: "PLEASE FILL ALL REQUIRED FIELDS",
-                icon: "error",
-                text: "We never share your information to anyone else."
-            });
+
+
         }
 
     }
@@ -142,32 +160,34 @@ export default function Enroll(){
                     <FormLabel id="demo-radio-buttons-group-label" className="w-100 text-start">Student Status</FormLabel>
                         <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
-                            defaultValue="new"
+                            defaultValue="NEW"
                             name="radio-buttons-group"
                             className="d-flex flex-lg-row flex-column w-100"
                             size="small"
-                            onChange={e => setStudentStatus(e.target.value)}
+                            onChange={e => setStudentStatus(e.target.value.toUpperCase())}
                         >
-                            <FormControlLabel size="small"  value="new" control={<Radio />} label="New" />
-                            <FormControlLabel size="small"  value="old" control={<Radio />} label="Old" />
-                            <FormControlLabel size="small"  value="transferee" control={<Radio />} label="Transferee" />
+                            <FormControlLabel size="small"  value="NEW" control={<Radio />} label="New" />
+                            <FormControlLabel size="small"  value="OLD" control={<Radio />} label="Old" />
+                            <FormControlLabel size="small"  value="TRANSFEREE" control={<Radio />} label="Transferee" />
                         </RadioGroup>
                     </FormControl>
 
-                    <TextField size="small" className="my-1 w-100" id="outlined-basic" label="First Name" variant="outlined" type="text" required onChange={e => setFirstName(e.target.value)}/>
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="First Name" variant="outlined" value={firstName} type="text" required onChange={e => setFirstName(e.target.value.toUpperCase())}/>
 
-                    <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Middle Name" variant="outlined" type="text"  onChange={e => setMiddleName(e.target.value)}/>
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Middle Name" variant="outlined" value={middleName} type="text"  onChange={e => setMiddleName(e.target.value.toUpperCase())}/>
 
-                    <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Last Name" variant="outlined" type="text" required onChange={e => setLastName(e.target.value)}/>
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Last Name" variant="outlined" type="text" required value={lastName} onChange={e => setLastName(e.target.value.toUpperCase())}/>
                     
                     <label className="w-100 text-start">Date of Birth</label>
-                    <TextField size="small"  className="my-1 w-100" id="outlined-basic" variant="outlined" type="date" required onChange={e => setDOB(e.target.value)}/>
+                    <TextField size="small" value={DOB}  className="my-2 w-100" id="outlined-basic" variant="outlined" type="date" required onChange={e => setDOB(e.target.value.toUpperCase())}/>
 
-                    <TextField size="small"  className="my-1 w-100" id="outlined-basic" label="Complete Address" variant="outlined" type="text" required onChange={e => setAddress(e.target.value)}/>
+                    <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Complete Address" variant="outlined" type="text" value={address} required onChange={e => setAddress(e.target.value.toUpperCase())}/>
 
-                    <TextField size="small"  className="my-1 w-100" id="outlined-basic" label="Mobile Number Ex. 09123456789" variant="outlined" inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} type="number" required onChange={e => setMobileNumber(e.target.value)}/>
+                    <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Mobile Number Ex. 09123456789" variant="outlined" value={mobileNumber} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} type="number" required onChange={e => setMobileNumber(e.target.value.toUpperCase())}/>
 
-                    <TextField size="small"  className="my-1 w-100" id="outlined-basic" label="Name on Social Media Like FB/Messenger" variant="outlined" type="text" required onChange={e => setSocialMedia(e.target.value)}/>
+                    <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Name on Social Media Like FB/Messenger" variant="outlined" type="text" value={socialMedia} required onChange={e => setSocialMedia(e.target.value.toUpperCase())}/>
+
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Medical Condition Ex. Asthma, Visually Impared, and others" value={medicalCondition} variant="outlined" type="text" onChange={e => setMedicalCondition(e.target.value.toUpperCase())}/>
 
                 <FormControl className="w-100 my-1">
                     
@@ -178,6 +198,7 @@ export default function Enroll(){
                     label="Grade Level"
                     required
                     onChange={e => setSelectGrade(e.target.value)}
+                    value={selectGrade}
                     >
                     <MenuItem value="">
                         <em>None</em>
@@ -207,20 +228,19 @@ export default function Enroll(){
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
                     label="Select Strand"
-                    required
-                    
+                    value={strand}
                     >
 
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={0}>STEM</MenuItem>
-                    <MenuItem value={1}>HUMSS</MenuItem>
-                    <MenuItem value={2}>ABM</MenuItem>
+                    <MenuItem value={"STEM"}>STEM</MenuItem>
+                    <MenuItem value={"HUMSS"}>HUMSS</MenuItem>
+                    <MenuItem value={"ABM"}>ABM</MenuItem>
                     </Select>
                 </FormControl>
 
-                <TextField size="small"  className="my-1 w-100 d-none" id="outlined-basic" label="Learner's Reference Number (LRN)" variant="outlined" type="text" />
+                <TextField size="small"  className="my-2 w-100 d-none" id="outlined-basic" label="Learner's Reference Number (LRN)" variant="outlined" value={LRN} type="text" />
                 </>
                 :
                 <>
@@ -232,15 +252,15 @@ export default function Enroll(){
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
                     label="Select Strand"
-                    required
-                    onChange={e => setStrand(e.target.value)}
+                    onChange={e => setStrand(e.target.value.toUpperCase())}
+                    value={strand}
                     >
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={"stem"}>STEM</MenuItem>
-                    <MenuItem value={"humss"}>HUMSS</MenuItem>
-                    <MenuItem value={"abm"}>ABM</MenuItem>
+                    <MenuItem value={"STEM"}>STEM</MenuItem>
+                    <MenuItem value={"HUMSS"}>HUMSS</MenuItem>
+                    <MenuItem value={"ABM"}>ABM</MenuItem>
                     </Select>
                 </FormControl>
                 :
@@ -250,28 +270,28 @@ export default function Enroll(){
                     labelId="demo-simple-select-helper-label"
                     id="demo-simple-select-helper"
                     label="Select Strand"
-                    required
-                    
+                    value={strand}
                     >
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    <MenuItem value={0}>STEM</MenuItem>
-                    <MenuItem value={1}>HUMSS</MenuItem>
-                    <MenuItem value={2}>ABM</MenuItem>
+                    <MenuItem value={"STEM"}>STEM</MenuItem>
+                    <MenuItem value={"HUMSS"}>HUMSS</MenuItem>
+                    <MenuItem value={"ABM"}>ABM</MenuItem>
                     </Select>
                 </FormControl>
                     }
 
-                <TextField size="small"  className="my-1 w-100" id="outlined-basic" label="Learner's Reference Number (LRN)" variant="outlined" type="number" inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} onChange={e => setLRN(e.target.value)}/>
+                <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Learner's Reference Number (LRN)" variant="outlined" type="number" value={LRN} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} onChange={e => setLRN(e.target.value.toUpperCase())}/>
                 </>
                 }
 
-                <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Present School" variant="outlined" type="text" required onChange={e => setPresentSchool(e.target.value)}/>
+                <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Present School" variant="outlined" type="text" value={presentSchool} required onChange={e => setPresentSchool(e.target.value.toUpperCase())}/>
 
-                <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Parent/Guardian Full Name" variant="outlined" type="text" required onChange={e => setParent(e.target.value)}/>
+                <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Parent/Guardian Full Name" variant="outlined" type="text" value={parent} required onChange={e => setParent(e.target.value.toUpperCase())}/>
 
-                <TextField size="small" className="my-1 w-100" id="outlined-basic" label="Parent/Guardian Mobile Number" variant="outlined" inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} type="number" required onChange={e => setParentNumber(e.target.value)}/>
+                <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Parent/Guardian Mobile Number" variant="outlined" value={parentNumber} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} type="number" required onChange={e => setParentNumber(e.target.value.toUpperCase())}/>
+
 
                 <Button variant="outline-dark" className="w-100 mt-4" type="submit" onClick={() => formRef.current.reportValidity()}>SUBMIT</Button>
 
