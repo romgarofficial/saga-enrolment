@@ -9,6 +9,7 @@ import  secureLocalStorage  from  "react-secure-storage";
 import { Navigate } from "react-router-dom";
 import Banner from "../components/Banner.js"
 
+
 export default function Enroll(){
     const formRef = React.useRef();
 
@@ -38,7 +39,6 @@ export default function Enroll(){
 
 
     function login(e) {
-
         e.preventDefault();
     
         fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/users/login`, {
@@ -54,27 +54,27 @@ export default function Enroll(){
         .then(res => res.json())
         .then(data => {
             console.log(data.accessToken);
-            if(data.accessToken !== undefined){
+    
+            if (data.accessToken) {
                 secureLocalStorage.setItem("token", data.accessToken);
                 retrieveUserDetails(data.accessToken);
     
                 Swal.fire({
                     title: "LOGIN SUCCESS!",
                     icon: "success",
-                    text: "Welcome to SAGA Online Enrollment System!"
+                    text: "Welcome to SAGA Online Enrolment System!"
                 });
-
+    
                 setEmail('');
                 setPassword('');
-            }
-            else if(data == "2"){
+            } else if (data === "2") {
                 console.log(data);
                 Swal.fire({
                     title: "EMAIL NOT RECOGNIZED",
                     icon: "error",
                     text: "Please contact the administrator about your account."
                 });
-            }else{
+            } else  {
                 console.log(data);
                 Swal.fire({
                     title: "LOGIN FAILED!",
@@ -83,9 +83,6 @@ export default function Enroll(){
                 });
             }
         });
-    
-        
-    
     }
     
     const retrieveUserDetails = (token) => {
@@ -99,45 +96,29 @@ export default function Enroll(){
         .then(res => res.json())
         .then(data => {
             console.log(data);
-    
+
             setUser({
-                id: secureLocalStorage.setItem("id", data._id),
+                id: secureLocalStorage.setItem("id", data.id),
                 isAdmin: secureLocalStorage.setItem("isAdmin", data.isAdmin),
-                email: secureLocalStorage.setItem("email", data.email),
+                email:  secureLocalStorage.setItem("email", data.email),
                 userType: secureLocalStorage.setItem("userType", data.userType),
                 firstName: secureLocalStorage.setItem("firstName", data.firstName),
-                middleName: secureLocalStorage.setItem("middleName", data.middleName),
+                middleName:  secureLocalStorage.setItem("middleName", data.middleName),
                 lastName: secureLocalStorage.setItem("lastName", data.lastName)
-
             });
+
         })
     }
-    
+
+    const userType = secureLocalStorage.getItem("userType");
+    const isLoggedIn = localStorage.length !== 0;
+
+    if (isLoggedIn) {
+        return <Navigate to="/dashboard" />;
+    } else {
 
     return(
-        <>
-        {
-            secureLocalStorage.getItem("id") !== null ?
-            <>
-            {
-                secureLocalStorage.getItem("userType") === "ADMIN" ?
-                <Navigate to="/dashboard"/>
-                :
-                <>
-                    {
-                        secureLocalStorage.getItem("userType") === "ADMISSION OFFICER" ?
-                        <>
-                        <Navigate to="/admission"/>
-                        </>
-                        :
-                        <Navigate to="/financial-assessment"/>
-                    }
-                </>
-            }
-            
-            </>
-            :
-            <>
+
             <Container fluid>
                 <Row>
                     <Col lg={6} sm={12} className="bg-lightgray d-flex justify-content-center align-items-center text-dark flex-column text-center shadow p-lg-5">
@@ -173,9 +154,6 @@ export default function Enroll(){
                     </Col>
                 </Row>
             </Container>
-            </>
-        }
-        </> 
     )
-    
+    }
 }

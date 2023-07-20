@@ -1,6 +1,6 @@
 export default function Footer(){
     return(
-        <footer class="bg-dark text-center text-white d-block">
+        <footer class="bg-dark text-center text-white position-relative">
             <div class="container p-4 pb-0">
                 <p class="text-warning">Connect with us on our social networks:</p>
                 <section class="mb-4">

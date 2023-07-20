@@ -42,7 +42,7 @@ export default function Enroll(){
     }, [selectGrade]);
 
     useEffect(() => {
-        document.title = 'SAGA - Enrollment';
+        document.title = 'SAGA - Enrolment';
     })
 
     function enroll(e){
@@ -73,7 +73,7 @@ export default function Enroll(){
                 address: address,
                 mobileNumber: mobileNumber,
                 socialAccount: socialMedia,
-                gradeLevelToEnroll: selectGrade,
+                gradeLevelToEnroll: "GRADE " + selectGrade,
                 strandToEnroll: strand,
                 presentSchool: presentSchool,
                 medicalCondition: medicalCondition,
@@ -89,7 +89,7 @@ export default function Enroll(){
                 Swal.fire({
                     title: "APPLICATION IS COMPLETE",
                     icon: "success",
-                    text: "Please complete your enrollment at St. Aloysius Gonzaga Academy in Santo Tomas San Luis Pampanga."
+                    text: "Please complete your enrolment at St. Aloysius Gonzaga Academy in Santo Tomas San Luis Pampanga."
                 });
                 setKinder(false);
                 setStudentStatus("NEW");
@@ -114,7 +114,7 @@ export default function Enroll(){
                 Swal.fire({
                     title: "YOU ALREADY SUBMITTED AN APPLICATION",
                     icon: "error",
-                    text: "Please complete your enrollment at St. Aloysius Gonzaga Academy in Santo Tomas San Luis Pampanga."
+                    text: "Please complete your enrolment at St. Aloysius Gonzaga Academy in Santo Tomas San Luis Pampanga."
                 });
 
             }else{

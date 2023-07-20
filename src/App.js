@@ -10,19 +10,29 @@ import Home from "./pages/Home.js";
 import Enroll from "./pages/Enroll.js";
 import Error from "./pages/Error.js";
 import Login from "./pages/Login.js";
+import Logout from "./pages/Logout.js";
+import Dashboard from "./pages/Dashboard.js";
+import Admission from "./pages/Admission.js";
 
 
 
 function App() {
 
   const [user, setUser] = useState({
-    id: null,
-    isAdmin: null
+      id: null,
+			isAdmin: null,
+      email: null,
+      userType: null,
+      firstName: null,
+      middleName: null,
+      lastName: null
   });
 
   const unsetUser = () =>{
     localStorage.clear(); 
   }
+
+  console.log(user);
 
 
 
@@ -31,16 +41,20 @@ function App() {
     <UserProvider value={{user, setUser, unsetUser}}>
       <Router>
         <AppNavbar />
-        <Container fluid className='p-0 m-0'>
+        <Container fluid className='p-0 m-0 d-flex flex-column'>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/enrollment" element={<Enroll />} />
+            <Route exact path="/enrolment" element={<Enroll />} />
+            <Route exact path="/dashboard" element={<Dashboard />} />
+            <Route exact path="/admission" element={<Admission />} />
             <Route exact path="/login" element={<Login />} />
+            <Route exact path="/logout" element={<Logout />} />
             <Route exact path="*" element={<Error />} />
           </Routes>
+          <Footer />
         </Container>
         </Router>
-        <Footer />
+        
     </UserProvider>
   );
 }
