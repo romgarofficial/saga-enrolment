@@ -13,6 +13,9 @@ import Login from "./pages/Login.js";
 import Logout from "./pages/Logout.js";
 import Dashboard from "./pages/Dashboard.js";
 import Admission from "./pages/Admission.js";
+import AcademicAssessment from "./pages/AcademicAssessment.js";
+import FinancialAssessment from "./pages/FinancialAssessment.js";
+import About from "./pages/About.js";
 
 
 
@@ -47,6 +50,9 @@ function App() {
             <Route exact path="/enrolment" element={<Enroll />} />
             <Route exact path="/dashboard" element={<Dashboard />} />
             <Route exact path="/admission" element={<Admission />} />
+            <Route exact path="/academic-assessment" element={<AcademicAssessment />} />
+            <Route exact path="/financial-assessment" element={<FinancialAssessment />} />
+            <Route exact path="/about" element={<About />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/logout" element={<Logout />} />
             <Route exact path="*" element={<Error />} />

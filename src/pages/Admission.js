@@ -21,7 +21,9 @@ export default function Admission(){
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [viewModal, setViewModal] = useState(false);
+    const [approveModal, setApproveModal] = useState(false);
     const [enrollStudentModal, setEnrollStudentModal] = useState(false);
+    const [applicationDataNotEmpty, setApplicationNotEmpty] = useState(false);
 
     const closeViewModal = () => {
         setViewModal(false);
@@ -33,6 +35,10 @@ export default function Admission(){
 
     const openEnrolStudentModal = () => {
         setEnrollStudentModal(true);
+    };
+
+    const closeApproveModal = () => {
+        setApproveModal(false);
     };
 
     
@@ -86,14 +92,10 @@ export default function Admission(){
 
 
     useEffect(() => {
-        document.title = 'SAGA - Dashboard';
+        document.title = 'SAGA - Admission';
         getAdmissionApplication(currentPage);
       }, [currentPage]);
 
-      useEffect(() => {
-        document.title = 'SAGA - Dashboard';
-        getAdmissionApplication(currentPage);
-      }, []);
 
       useEffect(() => {
         if (selectGrade_e === 0) {
@@ -103,7 +105,6 @@ export default function Admission(){
         }
     }, [selectGrade_e]);
 
-    /* GET ALL PRODUCTS */
 
 
 const getAdmissionApplication = (page) => {
@@ -118,36 +119,92 @@ const getAdmissionApplication = (page) => {
         setTotalPages(Math.ceil(data.length / rowsPerPage));
         console.log(data);
 
+        if(data.length !== 0){
+            setApplicationNotEmpty(true);
+        }else{
+            setApplicationNotEmpty(false);
+        }
+        
+
         });
+    };
+
+    const approveApplication = (id) => {
+        fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/enrollment/admission/${id}`, {
+
+                method : "PUT",
+                headers : {
+                    "Content-Type" : "application/json",
+                    "Authorization": `Bearer ${secureLocalStorage.getItem("token")}`
+    
+            },
+            body: JSON.stringify({
+                isDoneAdmission: true
+            })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+
+                
+    
+                if(data == "1"){
+                    Swal.fire({
+                        title: "APPLICATION APPROVED!",
+                        icon: "success",
+                        text: `${firstName} ${middleName} ${lastName} is now ready for Academic Assessment.`
+                    });
+    
+                    getAdmissionApplication();
+                    closeApproveModal();
+                }else if(data == "2"){
+                    Swal.fire({
+                        title: "APPLICATION ERROR!",
+                        icon: "success",
+                        text: `${firstName} ${middleName} ${lastName}'s application is already approved.`
+                    });
+    
+                    getAdmissionApplication();
+                }else{
+                    Swal.fire({
+                        title: "APPLICATION ERROR!",
+                        icon: "error",
+                        text: "Something went wrong. Please try again later"
+                    })
+                }
+            })
     };
     
       const renderTableRows = () => {
         if (!allAdmission || allAdmission.length === 0) {
             console.log("error")
-            return null; // or return a message like "No admissions found."
+            return null; 
         }
 
-        const startIndex = (currentPage - 1) * rowsPerPage;
-        const endIndex = startIndex + rowsPerPage;
-    
-        return allAdmission.slice(startIndex, endIndex).map((admission, index) => (
-            <tr key={admission._id}>
-                <td>{startIndex + index + 1}</td>
-                <td>{`${admission.firstName} ${admission.middleName} ${admission.lastName}`}</td>
-                <td>{admission.lrn}</td>
-                <td>{admission.gradeLevelToEnroll}</td>
-                <td>{admission.strandToEnroll}</td>
-                <td>{admission.mobileNumber}</td>
-                <td>{admission.studentStatus}</td>
-                <td className="text-center">
-                    <ButtonGroup>
-                        <Button variant="primary" size="sm" onClick={() => openViewModal(admission._id)}>View</Button>
-                        <Button variant="success" size="sm">Approve</Button>
-                        <Button variant="danger" size="sm">Archive</Button>
-                    </ButtonGroup>
-                </td>
-            </tr>
-        ));
+            
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+        
+            return allAdmission.slice(startIndex, endIndex).map((admission, index) => (
+                <tr key={admission._id}>
+                    <td>{startIndex + index + 1}</td>
+                    <td>{`${admission.firstName} ${admission.middleName} ${admission.lastName}`}</td>
+                    <td>{admission.lrn}</td>
+                    <td>{admission.gradeLevelToEnroll}</td>
+                    <td>{admission.strandToEnroll}</td>
+                    <td>{admission.mobileNumber}</td>
+                    <td>{admission.studentStatus}</td>
+                    <td className="text-center">
+                        <ButtonGroup>
+                            <Button variant="primary" size="sm" onClick={() => openViewModal(admission._id)}>View</Button>
+                            <Button variant="success" size="sm" onClick={() => openApproveModal(admission._id)}>Approve</Button>
+                            <Button variant="danger" size="sm">Archive</Button>
+                        </ButtonGroup>
+                    </td>
+                </tr>
+            ));
+        
+
     };
     
     const openViewModal = (id) => {
@@ -157,6 +214,7 @@ const getAdmissionApplication = (page) => {
             .then(res => res.json())
             .then(data => {
                 
+                setApplicationId(data._id);
                 setStatus(data.studentStatus);
                 setFirstName(data.firstName);
                 setMiddleName(data.middleName);
@@ -179,6 +237,40 @@ const getAdmissionApplication = (page) => {
             });
 
         setViewModal(true)
+        
+    };
+
+
+    const openApproveModal = (id) => {
+        setApplicationId(id);
+
+        fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/enrollment/admission/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                
+                setApplicationId(data._id);
+                setStatus(data.studentStatus);
+                setFirstName(data.firstName);
+                setMiddleName(data.middleName);
+                setLastName(data.lastName);
+                setDOB(data.birthDate);
+                setAddress(data.address);
+                setMobileNumber(data.mobileNumber);
+                setSocialMedia(data.socialAccount);
+                setStrand(data.strandToEnroll);
+                setLRN(data.lrn);
+                setPresentSchool(data.presentSchool);
+                setParent(data.parentFullName);
+                setParentNumber(data.parentMobileNumber);
+                setMedicalCondition(data.medicalCondition);
+                setSelectGrade(data.gradeLevelToEnroll);
+                setMedicalCondition(data.medicalCondition);
+                setEnrolledOn(data.createdOn);
+
+                
+            });
+
+        setApproveModal(true)
         
     };
 
@@ -282,14 +374,24 @@ const getAdmissionApplication = (page) => {
             :
             <Container fluid className="d-flex bg-lightgray flex-wrap p-2 p-lg-2 flex-wrap">
                 <h1 className="display-5 fw-bold ms-5 my-2">ADMISSION</h1>
-                    <Container className=" bg-light d-flex flex-column p-1 p-lg-3 rounded shadow">
+                    <Container className=" bg-light d-flex flex-column p-1 p-lg-3 rounded shadow my-4 min-vh-100">
                     <h4 className="m-2">TOOLS</h4>
                     <Container fluid className="d-flex flex-column flex-lg-row ">
                         <Button clas variant="success"  className="px-5 mx-0 mx-lg-0 my-2 my-lg-3 me-0 me-lg-2" onClick={() => openEnrolStudentModal()}><BsPersonFillAdd size={20} className="p-0 m-0 mx-2" />Enroll</Button>
                         <Button clas variant="warning"  className="px-5 mx-0 mx-lg-0 my-2 my-lg-3" onClick={() => getAdmissionApplication()}> <BsArrowClockwise size={20} className="p-0 m-0 mx-2" />Refresh</Button>
                     </Container>
 
-                    <Container condensed fluid className="d-flex flex-wrap  flex-lg-row my-3 overflow-x-auto">
+                    <Container condensed fluid className="d-flex flex-wrap  flex-lg-row my-3 overflow-x-auto ">
+                    {
+                        applicationDataNotEmpty === false ?
+
+                    <>
+                        <Container fluid className="p-3 d-flex justify-content-center align-items-center vh-75">
+                            <h1 className="display-6 fw-bold">There is no new application.</h1>
+                        </Container>
+                    </>
+                    :
+                    <>
                     <Table striped bordered hover className="table-secondary">
                         <thead className=" text-warning">
                             <tr >
@@ -317,6 +419,9 @@ const getAdmissionApplication = (page) => {
                         onChange={(event, page) => setCurrentPage(page)}
                     />
                     </Container>
+                    </>
+                    }
+                    
 
                     </Container>
 
@@ -388,7 +493,7 @@ const getAdmissionApplication = (page) => {
             </Container>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="success px-4" onClick={closeViewModal}>APPROVE</Button>
+            <Button variant="success px-4" onClick={() => openApproveModal(applicationId)}>APPROVE</Button>
             <Button variant="danger px-4" onClick={closeViewModal}>Close</Button>
         </Modal.Footer>
         </Modal>
@@ -563,8 +668,28 @@ const getAdmissionApplication = (page) => {
             <Button variant="danger px-4" onClick={closeEnrollStudentModal}>Close</Button>
         </Modal.Footer>
         </Modal>
+
+
+
+        {/* Confirm approve application modal */}
+
+        <Modal centered show={approveModal} onShow={closeViewModal}>
+            <Modal.Header className="bg-warning">
+            <Modal.Title>CONFIRM APPROVAL</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {`Approve ${firstName} ${middleName} ${lastName}'s application?`}
+            </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={closeApproveModal}>
+                Close
+            </Button>
+            <Button variant="success" onClick={() => approveApplication(applicationId)} >
+                APRROVE
+            </Button>
+            </Modal.Footer>
+        </Modal>
         </>
-        
     )
 }
 
