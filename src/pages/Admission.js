@@ -50,6 +50,7 @@ export default function Admission(){
     const [firstName, setFirstName] = useState("");
     const [middleName, setMiddleName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("");
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("none");
     const [DOB, setDOB] = useState("");
@@ -69,6 +70,7 @@ export default function Admission(){
     const [firstName_e, setFirstName_e] = useState("");
     const [middleName_e, setMiddleName_e] = useState("");
     const [lastName_e, setLastName_e] = useState("");
+    const [gender_e, setGender_e] = useState("");
     const [fullName_e, setFullName_e] = useState("");
     const [email_e, setEmail_e] = useState("none");
     const [DOB_e, setDOB_e] = useState("");
@@ -219,6 +221,7 @@ const getAdmissionApplication = (page) => {
                 setFirstName(data.firstName);
                 setMiddleName(data.middleName);
                 setLastName(data.lastName);
+                setGender(data.gender);
                 setDOB(data.birthDate);
                 setAddress(data.address);
                 setMobileNumber(data.mobileNumber);
@@ -253,6 +256,7 @@ const getAdmissionApplication = (page) => {
                 setFirstName(data.firstName);
                 setMiddleName(data.middleName);
                 setLastName(data.lastName);
+                setGender(data.gender);
                 setDOB(data.birthDate);
                 setAddress(data.address);
                 setMobileNumber(data.mobileNumber);
@@ -297,6 +301,7 @@ const getAdmissionApplication = (page) => {
                 firstName: firstName_e,
                 middleName: middleName_e,
                 lastName: lastName_e,
+                gender: gender_e,
                 lrn: LRN_e,
                 birthDate: DOB_e,
                 address: address_e,
@@ -337,6 +342,7 @@ const getAdmissionApplication = (page) => {
                 setParentNumber_e("");
                 setMedicalCondition_e("");
                 setSelectGrade_e("");
+                setGender_e("");
 
                 getAdmissionApplication();
             }
@@ -372,7 +378,7 @@ const getAdmissionApplication = (page) => {
             localStorage.length === 0 ?
             <Navigate to={"/login"}/>
             :
-            <Container fluid className="d-flex bg-lightgray flex-wrap p-2 p-lg-2 flex-wrap">
+            <Container fluid className="d-flex bg-lightgray p-2 p-lg-2 flex-column text-center">
                 <h1 className="display-5 fw-bold ms-5 my-2">ADMISSION</h1>
                     <Container className=" bg-light d-flex flex-column p-1 p-lg-3 rounded shadow my-4 min-vh-100">
                     <h4 className="m-2">TOOLS</h4>
@@ -478,6 +484,8 @@ const getAdmissionApplication = (page) => {
                     <Col lg={4} sm={12}>
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Student Status" variant="outlined" type="text" value={status} />
 
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Gender" variant="outlined" type="text" value={gender} />
+
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Parent/Guardian Name" variant="outlined" type="text" value={parent} />
 
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Parent/Guardian Mobile Number" variant="outlined" type="number" value={parentNumber} />
@@ -485,6 +493,8 @@ const getAdmissionApplication = (page) => {
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Medical Condition" variant="outlined" type="text" value={medicalCondition} />
 
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Date of Online Enrolment" variant="outlined" type="text" value={enrolledOn} />
+
+                    
 
                     </Col>
 
@@ -543,6 +553,25 @@ const getAdmissionApplication = (page) => {
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Middle Name" variant="outlined" value={middleName_e} type="text"  onChange={e => setMiddleName_e(e.target.value.toUpperCase())}/>
 
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Last Name" variant="outlined" type="text" required value={lastName_e} onChange={e => setLastName_e(e.target.value.toUpperCase())}/>
+
+                    <FormControl className="w-100 my-1">
+                    
+                    <InputLabel id="demo-simple-select-helper-label">Gender</InputLabel>
+                    <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    label="Grade Level"
+                    required
+                    onChange={e => setGender_e(e.target.value)}
+                    value={gender_e}
+                    >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={"MALE"}>Male</MenuItem>
+                    <MenuItem value={"FEMALE"}>Female</MenuItem>
+                    </Select>
+                </FormControl>
                     
                     <label className="w-100 text-start">Date of Birth</label>
                     <TextField size="small" value={DOB_e}  className="my-2 w-100" id="outlined-basic" variant="outlined" type="date" required onChange={e => setDOB_e(e.target.value.toUpperCase())}/>

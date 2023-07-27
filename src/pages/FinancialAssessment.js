@@ -39,6 +39,7 @@ export default function FinancialAssessment(){
     const [firstName, setFirstName] = useState("");
     const [middleName, setMiddleName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("");
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("none");
     const [DOB, setDOB] = useState("");
@@ -179,6 +180,7 @@ const getAssessment2Application = (page) => {
                 setFirstName(data.firstName);
                 setMiddleName(data.middleName);
                 setLastName(data.lastName);
+                setGender(data.gender);
                 setDOB(data.birthDate);
                 setAddress(data.address);
                 setMobileNumber(data.mobileNumber);
@@ -243,7 +245,7 @@ const getAssessment2Application = (page) => {
             localStorage.length === 0 ?
             <Navigate to={"/login"}/>
             :
-            <Container fluid className="d-flex bg-lightgray flex-wrap p-2 p-lg-2 flex-wrap">
+            <Container fluid className="d-flex bg-lightgray flex-wrap p-2 p-lg-2 flex-column text-center">
                 <h1 className="display-5 fw-bold ms-5 my-2">FINANCIAL ASSESSMENT</h1>
                     <Container className=" bg-light d-flex flex-column p-1 p-lg-3 rounded shadow my-4 min-vh-100">
                     <h4 className="m-2">TOOLS</h4>
@@ -347,6 +349,8 @@ const getAssessment2Application = (page) => {
 
                     <Col lg={4} sm={12}>
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Student Status" variant="outlined" type="text" value={status} />
+
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Gender" variant="outlined" type="text" value={gender} />
 
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Parent/Guardian Name" variant="outlined" type="text" value={parent} />
 

@@ -17,6 +17,7 @@ export default function Enroll(){
     const [firstName, setFirstName] = useState("");
     const [middleName, setMiddleName] = useState("");
     const [lastName, setLastName] = useState("");
+    const [gender, setGender] = useState("");
     const [fullName, setFullName] = useState("");
     const [DOB, setDOB] = useState("");
     const [address, setAddress] = useState("");
@@ -68,6 +69,7 @@ export default function Enroll(){
                 firstName: firstName,
                 middleName: middleName,
                 lastName: lastName,
+                gender: gender,
                 lrn: LRN,
                 birthDate: DOB,
                 address: address,
@@ -177,6 +179,25 @@ export default function Enroll(){
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Middle Name" variant="outlined" value={middleName} type="text"  onChange={e => setMiddleName(e.target.value.toUpperCase())}/>
 
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Last Name" variant="outlined" type="text" required value={lastName} onChange={e => setLastName(e.target.value.toUpperCase())}/>
+
+                    <FormControl className="w-100 my-1">
+                    
+                    <InputLabel id="demo-simple-select-helper-label">Gender</InputLabel>
+                    <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="demo-simple-select-helper"
+                    label="Grade Level"
+                    required
+                    onChange={e => setGender(e.target.value)}
+                    value={gender}
+                    >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={"MALE"}>Male</MenuItem>
+                    <MenuItem value={"FEMALE"}>Female</MenuItem>
+                    </Select>
+                </FormControl>
                     
                     <label className="w-100 text-start">Date of Birth</label>
                     <TextField size="small" value={DOB}  className="my-2 w-100" id="outlined-basic" variant="outlined" type="date" required onChange={e => setDOB(e.target.value.toUpperCase())}/>

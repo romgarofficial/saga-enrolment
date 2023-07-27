@@ -4,7 +4,7 @@ import { Container } from "react-bootstrap";
 import AppNavbar from "./components/AppNavbar";
 import Footer from "./components/Footer.js";
 import { UserProvider } from "./UserContext";
-import {useState} from "react"
+import {useState, useEffect} from "react"
 
 import Home from "./pages/Home.js";
 import Enroll from "./pages/Enroll.js";
@@ -20,6 +20,8 @@ import About from "./pages/About.js";
 
 
 function App() {
+
+
 
   const [user, setUser] = useState({
       id: null,
