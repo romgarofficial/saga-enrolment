@@ -44,7 +44,7 @@ export default function AppNavbar(){
 
                       <NavDropdown className="bg-secondary rounded px-2 fw-bold " title={<span className="text-warning">{userFullName}</span>} id="navbarScrollingDropdown">
                         <NavDropdown.Item as={NavLink} to="/profile">Profile Settings</NavDropdown.Item>
-                        <NavDropdown.Item as={NavLink} to="/tools">Tools</NavDropdown.Item>
+                        <NavDropdown.Item as={NavLink} to="/tools">Academic Tools</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item as={NavLink} to="/logout">Logout</NavDropdown.Item>
                       </NavDropdown>

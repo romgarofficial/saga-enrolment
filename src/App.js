@@ -15,12 +15,12 @@ import Dashboard from "./pages/Dashboard.js";
 import Admission from "./pages/Admission.js";
 import AcademicAssessment from "./pages/AcademicAssessment.js";
 import FinancialAssessment from "./pages/FinancialAssessment.js";
+import Verification from "./pages/Verification.js";
 import About from "./pages/About.js";
 
 
 
 function App() {
-
 
 
   const [user, setUser] = useState({
@@ -54,6 +54,7 @@ function App() {
             <Route exact path="/admission" element={<Admission />} />
             <Route exact path="/academic-assessment" element={<AcademicAssessment />} />
             <Route exact path="/financial-assessment" element={<FinancialAssessment />} />
+            <Route exact path="/final-verification" element={<Verification />} />
             <Route exact path="/about" element={<About />} />
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/logout" element={<Logout />} />
