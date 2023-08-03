@@ -303,7 +303,7 @@ export default function Enroll(){
                 </FormControl>
                     }
 
-                <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Learner's Reference Number (LRN)" variant="outlined" type="number" value={LRN} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} onChange={e => setLRN(e.target.value.toUpperCase())}/>
+                <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Learner's Reference Number (LRN)" variant="outlined" required type="number" value={LRN} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} onChange={e => setLRN(e.target.value.toUpperCase())}/>
                 </>
                 }
 

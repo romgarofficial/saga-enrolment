@@ -139,9 +139,9 @@ export default function Enroll(){
                         >
                         <h1 className="my-4">LOGIN</h1>
                     
-                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Email" variant="outlined" type="email" value={email} required onChange={e => setEmail(e.target.value)}/>
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Email" variant="outlined" type="email" value={email} required onChange={e => setEmail(e.target.value)} autoComplete/>
     
-                    <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Password" variant="outlined" type="password" value={password} required onChange={e => setPassword(e.target.value)}/>
+                    <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Password" variant="outlined" type="password" value={password} required onChange={e => setPassword(e.target.value)} autoComplete/>
     
                     {
                         isActive ?
