@@ -1,4 +1,4 @@
-import {Col, Row, Container, Button, Image} from "react-bootstrap"
+import {Col, Row, Container, Button, Image, Spinner} from "react-bootstrap"
 import {Box, TextField, RadioGroup, Radio, FormControlLabel, FormLabel, FormControl} from '@mui/material';
 import Swal from "sweetalert2"
 import React from "react";
@@ -7,6 +7,7 @@ import { useEffect, useState, useContext } from "react";
 import UserContext from "../UserContext.js";
 import  secureLocalStorage  from  "react-secure-storage";
 import { Navigate } from "react-router-dom";
+import Loader from "../components/Loader.js";
 import Banner from "../components/Banner.js"
 
 
@@ -18,6 +19,8 @@ export default function Enroll(){
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const [buttonLoader, setButtonLoader] = useState(false);
 
 
     useEffect(() => {
@@ -40,6 +43,8 @@ export default function Enroll(){
 
     function login(e) {
         e.preventDefault();
+
+        setButtonLoader(true);
     
         fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/users/login`, {
             method: "POST",
@@ -58,6 +63,7 @@ export default function Enroll(){
             if (data.accessToken) {
                 secureLocalStorage.setItem("token", data.accessToken);
                 retrieveUserDetails(data.accessToken);
+                setButtonLoader(false);
     
                 Swal.fire({
                     title: "LOGIN SUCCESS!",
@@ -69,12 +75,14 @@ export default function Enroll(){
                 setPassword('');
             } else if (data === "2") {
                 console.log(data);
+                setButtonLoader(false);
                 Swal.fire({
                     title: "EMAIL NOT RECOGNIZED",
                     icon: "error",
                     text: "Please contact the administrator about your account."
                 });
             } else  {
+                setButtonLoader(false);
                 console.log(data);
                 Swal.fire({
                     title: "LOGIN FAILED!",
@@ -110,6 +118,10 @@ export default function Enroll(){
         })
     }
 
+    function GrowExample() {
+        return <Spinner animation="grow" />;
+      }
+
     const userType = secureLocalStorage.getItem("userType");
     const isLoggedIn = localStorage.length !== 0;
 
@@ -118,7 +130,6 @@ export default function Enroll(){
     } else {
 
     return(
-
             <Container fluid>
                 <Row>
                     <Col lg={6} sm={12} className="bg-lightgray d-flex justify-content-center align-items-center text-dark flex-column text-center shadow p-lg-5">
@@ -145,7 +156,22 @@ export default function Enroll(){
     
                     {
                         isActive ?
-                        <Button type="submit" variant="primary" className="w-100 mt-4" onClick={() => formRef.current.reportValidity()}>LOGIN</Button>
+                        <>
+                        {
+                            buttonLoader === false ?
+                            <Button type="submit" variant="primary" className="w-100 mt-4" onClick={() => formRef.current.reportValidity()}>LOGIN</Button>
+                            :
+                            <Button disabled type="submit" variant="primary" className="w-100 mt-4" onClick={() => formRef.current.reportValidity()}><Spinner
+                                            as="span"
+                                            animation="border"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                            />
+                                            LOADING...</Button>
+                        }
+                        </>
+                        
                         :
                         <Button variant="outline-primary" className="w-100 mt-4" onClick={() => formRef.current.reportValidity()} disabled>LOGIN</Button>
                     }
@@ -156,4 +182,5 @@ export default function Enroll(){
             </Container>
     )
     }
+    
 }

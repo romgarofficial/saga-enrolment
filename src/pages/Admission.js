@@ -1,4 +1,4 @@
-import {ButtonGroup, Table, Container, Button, Modal, Col, Row} from "react-bootstrap"
+import {ButtonGroup, Table, Container, Button, Modal, Col, Row, Spinner} from "react-bootstrap"
 import  secureLocalStorage  from  "react-secure-storage";
 import { NavLink, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -40,6 +40,8 @@ export default function Admission(){
     const closeApproveModal = () => {
         setApproveModal(false);
     };
+
+    const [loader, setLoader] = useState(false);
 
     
 
@@ -88,14 +90,10 @@ export default function Admission(){
 
     const rowsPerPage = 10;
 
-    const refreshAdmissionData = () => {
-        getAdmissionApplication(currentPage);
-      };
-
-
     useEffect(() => {
         document.title = 'SAGA - Admission';
         getAdmissionApplication(currentPage);
+        setLoader(true);
       }, [currentPage]);
 
 
@@ -110,6 +108,9 @@ export default function Admission(){
 
 
 const getAdmissionApplication = (page) => {
+
+    setLoader(true)
+
     fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/enrollment/admission`, {
         headers: {
         "Authorization": `Bearer ${secureLocalStorage.getItem("token")}`
@@ -121,10 +122,14 @@ const getAdmissionApplication = (page) => {
         setTotalPages(Math.ceil(data.length / rowsPerPage));
         console.log(data);
 
+        setLoader(false)
+
         if(data.length !== 0){
             setApplicationNotEmpty(true);
+            setLoader(false)
         }else{
             setApplicationNotEmpty(false);
+            setLoader(false)
         }
         
 
@@ -371,6 +376,8 @@ const getAdmissionApplication = (page) => {
     }
 
 
+
+
     return(
         <>
        
@@ -398,11 +405,19 @@ const getAdmissionApplication = (page) => {
                     </>
                     :
                     <>
-                    <Table striped bordered hover className="table-secondary">
+                    {
+                        loader ?
+                        <Container fluid className="p-3 d-flex justify-content-center align-items-center vh-75">
+                            <Spinner animation="border" role="status" variant="primary">
+                                <span className="visually-hidden">Loading...</span>
+                            </Spinner>
+                        </Container>
+                        :
+                        <Table striped bordered hover className="table-secondary">
                         <thead className=" text-warning">
                             <tr >
                             <th className="bg-dark text-light">#</th>
-                            <th className="bg-dark text-light">Full Name</th>
+                            <th className="bg-dark text-light">Complete Name</th>
                             <th className="bg-dark text-light">LRN</th>
                             <th className="bg-dark text-light">Grade</th>
                             <th className="bg-dark text-light">Strand</th>
@@ -415,6 +430,8 @@ const getAdmissionApplication = (page) => {
                             {renderTableRows()}
                         </tbody>
                     </Table>
+                    }
+                    
 
                     <Container className="d-flex justify-content-center">
                     <Pagination
