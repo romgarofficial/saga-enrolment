@@ -156,9 +156,9 @@ const finalVerification = (page) => {
                 <tr key={finalVerification._id}>
                     <td>{startIndex + index + 1}</td>
                     <td>{`${finalVerification.firstName} ${finalVerification.middleName} ${finalVerification.lastName}`}</td>
-                    <td>{finalVerification.requirements.birtCert === false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
-                    <td>{finalVerification.requirements.reportCard === false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
-                    <td>{finalVerification.requirements.transcriptOfRecords === false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
+                    <td>{finalVerification.requirements.birtCert !== false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
+                    <td>{finalVerification.requirements.reportCard !== false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
+                    <td>{finalVerification.requirements.transcriptOfRecords !== false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
                     <td className="text-center">
                         <ButtonGroup>
                             <Button variant="primary" size="sm" onClick={() => openViewModal(finalVerification._id)}>View</Button>
@@ -217,13 +217,14 @@ const finalVerification = (page) => {
         fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/enrollment/final-verification/${id}`)
             .then(res => res.json())
             .then(data => {
+
+                const req = data.requirements;
                 
                 setApplicationId(data._id);
                 setStatus(data.studentStatus);
                 setFirstName(data.firstName);
                 setMiddleName(data.middleName);
                 setLastName(data.lastName);
-                setGender(data.gender);
                 setDOB(data.birthDate);
                 setAddress(data.address);
                 setMobileNumber(data.mobileNumber);
@@ -237,12 +238,62 @@ const finalVerification = (page) => {
                 setSelectGrade(data.gradeLevelToEnroll);
                 setMedicalCondition(data.medicalCondition);
                 setEnrolledOn(data.createdOn);
-
-                
+                setBirthCert(data.requirements.birthCert);
+                setReportCard(data.requirements.reportCard);
+                setTOR(data.requirements.transcriptOfRecords);
             });
 
         setFilesModal(true)
-        
+    };
+
+    const updateFiles = (id) => {
+
+        setApplicationId(id);
+
+        fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/final-verification/${id}`,{
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                    "requirements": {
+                        "birthCert": birthCert,
+                        "reportCard": reportCard,
+                        "transcriptOfRecords": TOR
+                    }
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+
+                if(data == "1"){
+                    Swal.fire({
+                        title: "APPLICATION UPDATED!",
+                        icon: "success",
+                        text: `${firstName} ${middleName} ${lastName}'s files are now updated.`
+                    });
+    
+                    finalVerification();
+                    closeFilesModal();
+                }else if(data == "2"){
+                    Swal.fire({
+                        title: "APPLICATION ERROR!",
+                        icon: "error",
+                        text: `${firstName} ${middleName} ${lastName}'s are updated.`
+                    });
+    
+                    finalVerification();
+                }else{
+                    Swal.fire({
+                        title: "APPLICATION ERROR!",
+                        icon: "error",
+                        text: "Something went wrong. Please try again later"
+                    })
+                }
+
+            });
+
+        setFilesModal(true)
     };
 
 
@@ -278,22 +329,6 @@ const finalVerification = (page) => {
         setApproveModal(true)
         
     };
-
-    const handleChange = (event) => {
-        const { name, checked } = event.target;
-        setRequirements((prevState) => ({
-        ...prevState,
-        [name]: checked,
-        }));
-    };
-
-    const [requirements, setRequirements] = useState({
-        birthCert: false,
-        reportCard: false,
-        transcriptOfRecords: false,
-    });
-
-
 
     return(
         <>
@@ -444,34 +479,67 @@ const finalVerification = (page) => {
             <Container className="p-3">
             <h2 className="fw-bold">REQUIREMENTS</h2>
                 <Container className="py-3">
-                    <Form>
-                        <Form.Check
-                            type="checkbox"
-                            label="Has Birth Certificate"
-                            checked={requirements.birthCert}
-                            onChange={handleChange}
-                            name="birthCert"
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Has Report Card"
-                            checked={requirements.reportCard}
-                            onChange={handleChange}
-                            name="reportCard"
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            label="Has Transcript of Records"
-                            checked={requirements.transcriptOfRecords}
-                            onChange={handleChange}
-                            name="transcriptOfRecords"
-                        />
-                    </Form>
+                    <FormControl className="w-100 my-1">
+                        
+                        <InputLabel id="demo-simple-select-helper-label">HAS BIRTH CERTIFICATE</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        label="HAS BIRTH CERTIFICATE"
+                        required
+                        onChange={e => setBirthCert(e.target.value)}
+                        value={birthCert}
+                        >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={false}>NONE</MenuItem>
+                        <MenuItem value={true}>YES</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <FormControl className="w-100 my-3">
+                        
+                        <InputLabel id="demo-simple-select-helper-label">HAS REPORT CARD</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        label="HAS REPORT CARD"
+                        required
+                        onChange={e => setReportCard(e.target.value)}
+                        value={reportCard}
+                        >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={false}>NONE</MenuItem>
+                        <MenuItem value={true}>YES</MenuItem>
+                        </Select>
+                    </FormControl>
+
+                    <FormControl className="w-100 my-1">
+                        
+                        <InputLabel id="demo-simple-select-helper-label">HAS TRANSCRIPT OF RECORDS</InputLabel>
+                        <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        label="HAS TRANSCRIPT OF RECORDS"
+                        required
+                        onChange={e => setTOR(e.target.value)}
+                        value={TOR}
+                        >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={false}>NONE</MenuItem>
+                        <MenuItem value={true}>YES</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Container>
             </Container>
         </Modal.Body>
         <Modal.Footer>
-            <Button variant="primary px-4" onClick={() => openApproveModal(applicationId)}>UPDATE</Button>
+            <Button variant="primary px-4" onClick={() => updateFiles(applicationId)} >UPDATE</Button>
             <Button variant="danger px-4" onClick={closeFilesModal}>Close</Button>
         </Modal.Footer>
         </Modal>

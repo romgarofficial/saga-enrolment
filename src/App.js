@@ -17,6 +17,7 @@ import AcademicAssessment from "./pages/AcademicAssessment.js";
 import FinancialAssessment from "./pages/FinancialAssessment.js";
 import Verification from "./pages/Verification.js";
 import About from "./pages/About.js";
+import { Navigate } from "react-router-dom";
 
 
 
@@ -38,6 +39,12 @@ function App() {
   }
 
   console.log(user);
+
+  useEffect(() =>{
+    if(localStorage.length === 0){
+      <Navigate to="/"/>
+    }
+  })
 
 
 
