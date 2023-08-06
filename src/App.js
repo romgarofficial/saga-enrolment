@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() =>{
     if(localStorage.length === 0){
-      <Navigate to="/"/>
+      <Navigate to="/logout"/>
     }
   })
 
