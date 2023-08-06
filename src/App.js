@@ -29,7 +29,7 @@ function App() {
 			isAdmin: null,
       email: null,
       userType: null,
-      firstName: null,
+      firstName: "ha",
       middleName: null,
       lastName: null
   });
