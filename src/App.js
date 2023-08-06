@@ -5,6 +5,7 @@ import AppNavbar from "./components/AppNavbar";
 import Footer from "./components/Footer.js";
 import { UserProvider } from "./UserContext";
 import {useState, useEffect} from "react"
+import  secureLocalStorage  from  "react-secure-storage";
 
 import Home from "./pages/Home.js";
 import Enroll from "./pages/Enroll.js";
