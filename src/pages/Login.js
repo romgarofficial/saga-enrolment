@@ -92,6 +92,16 @@ export default function Enroll(){
             }
         });
     }
+
+    const setUserDataToLocalStrage = (id, isAdmin, email, userType, fname, mname, lname) =>{
+                secureLocalStorage.setItem("id", id);
+                secureLocalStorage.setItem("isAdmin", isAdmin);
+                secureLocalStorage.setItem("email", email);
+                secureLocalStorage.setItem("userType", userType);
+                secureLocalStorage.setItem("firstName", fname);
+                secureLocalStorage.setItem("middleName", mname);
+                secureLocalStorage.setItem("lastName", lname);
+    }
     
     const retrieveUserDetails = (token) => {
     
@@ -106,14 +116,16 @@ export default function Enroll(){
             console.log(data);
 
             setUser({
-                id: secureLocalStorage.setItem("id", data.id),
-                isAdmin: secureLocalStorage.setItem("isAdmin", data.isAdmin),
-                email:  secureLocalStorage.setItem("email", data.email),
-                userType: secureLocalStorage.setItem("userType", data.userType),
-                firstName: secureLocalStorage.setItem("firstName", data.firstName),
-                middleName:  secureLocalStorage.setItem("middleName", data.middleName),
-                lastName: secureLocalStorage.setItem("lastName", data.lastName)
+                id: data.id,
+                isAdmin: data.isAdmin,
+                email:  data.email,
+                userType: data.userType,
+                firstName: data.firstName,
+                middleName: data.middleName,
+                lastName: data.lastName
             });
+
+            setUserDataToLocalStrage(data.id, data.isAdmin, data.email, data.userType, data.firstName, data.middleName, data.lastName);
 
         })
     }

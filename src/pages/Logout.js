@@ -21,6 +21,7 @@ export default function Logout(){
             lastName: null
 		});
 	});
+	
 	return(
 		<Navigate to="/" />
 	)
