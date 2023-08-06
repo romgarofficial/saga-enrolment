@@ -41,9 +41,7 @@ function App() {
   console.log(user);
 
   useEffect(() =>{
-    if(localStorage.length === 0 || localStorage.getItem("id") === null){
-      <Navigate to="/logout"/>
-    }
+      unsetUser();
   })
 
 
