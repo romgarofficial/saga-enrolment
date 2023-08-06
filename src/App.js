@@ -25,13 +25,13 @@ function App() {
 
 
   const [user, setUser] = useState({
-      id: null,
-			isAdmin: null,
-      email: null,
-      userType: null,
-      firstName: null,
-      middleName: null,
-      lastName: null
+      id: secureLocalStorage.getItem("id"),
+			isAdmin: secureLocalStorage.getItem("isAdmin"),
+      email: secureLocalStorage.getItem("email"),
+      userType: secureLocalStorage.getItem("userType"),
+      firstName: secureLocalStorage.getItem("firstName"),
+      middleName: secureLocalStorage.getItem("middleName"),
+      lastName: secureLocalStorage.getItem("lastName")
   });
 
   const unsetUser = () =>{
