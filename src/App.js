@@ -29,7 +29,7 @@ function App() {
 			isAdmin: null,
       email: null,
       userType: null,
-      firstName: "ha",
+      firstName: null,
       middleName: null,
       lastName: null
   });
@@ -39,13 +39,6 @@ function App() {
   }
 
   console.log(user);
-
-  useEffect(() =>{
-      unsetUser();
-  })
-
-
-
 
   return (
     <UserProvider value={{user, setUser, unsetUser}}>

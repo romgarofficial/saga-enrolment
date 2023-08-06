@@ -23,7 +23,7 @@ export default function AppNavbar(){
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
             {
-              localStorage.length === 0 ?
+              user.id === null ?
                 <>
                   <Nav.Link as={NavLink} to="/">Home</Nav.Link>
                   <Nav.Link as={NavLink} to="/about">About</Nav.Link>
