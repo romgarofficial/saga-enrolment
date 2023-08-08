@@ -286,7 +286,7 @@ const getAdmissionApplication = (page) => {
     function enroll(e){
         e.preventDefault();
 
-        if(firstName_e === "" || lastName_e === "" || DOB_e === "" || address_e === "" || mobileNumber_e === "" || socialMedia_e === "" || presentSchool_e === "" || parent_e === "" || parentNumber_e === "" || selectGrade_e === ""){
+        if((firstName_e === "" || lastName_e === "" || DOB_e === "" || address_e === "" || mobileNumber_e === "" || socialMedia_e === "" || presentSchool_e === "" || parent_e === "" || parentNumber_e === "" || selectGrade_e === "") || (selectGrade_e >= 1 && LRN_e === "") ){
         
             Swal.fire({
                 title: "PLEASE FILL ALL REQUIRED FIELDS",
@@ -694,7 +694,7 @@ const getAdmissionApplication = (page) => {
                 </FormControl>
                     }
 
-                <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Learner's Reference Number (LRN)" variant="outlined" type="number" value={LRN_e} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} onChange={e => setLRN_e(e.target.value.toUpperCase())}/>
+                <TextField size="small"  className="my-2 w-100" id="outlined-basic" label="Learner's Reference Number (LRN)" required variant="outlined" type="number" value={LRN_e} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} onChange={e => setLRN_e(e.target.value.toUpperCase())}/>
                 </>
                 }
 

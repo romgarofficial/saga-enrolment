@@ -67,13 +67,13 @@ export default function Verification(){
 
     const refreshFinalVerification = () => {
         finalVerification(currentPage);
-      };
+    };
 
 
     useEffect(() => {
         document.title = 'SAGA - Final Verification';
         finalVerification(currentPage);
-      }, [currentPage]);
+    }, [currentPage]);
 
 
 const finalVerification = (page) => {
@@ -156,7 +156,7 @@ const finalVerification = (page) => {
                 <tr key={finalVerification._id}>
                     <td>{startIndex + index + 1}</td>
                     <td>{`${finalVerification.firstName} ${finalVerification.middleName} ${finalVerification.lastName}`}</td>
-                    <td>{finalVerification.requirements.birtCert !== false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
+                    <td>{finalVerification.requirements.birthCert !== false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
                     <td>{finalVerification.requirements.reportCard !== false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
                     <td>{finalVerification.requirements.transcriptOfRecords !== false ? <span className="text-success fw-bold m-0 p-0">YES</span> : <span className="text-danger fw-bold m-0 p-0">NONE</span> }</td>
                     <td className="text-center">
@@ -250,7 +250,7 @@ const finalVerification = (page) => {
 
         setApplicationId(id);
 
-        fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/final-verification/${id}`,{
+        fetch(`${process.env.REACT_APP_ONE_SAGA_URL}/enrollment/final-verification/${id}`,{
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -279,7 +279,7 @@ const finalVerification = (page) => {
                     Swal.fire({
                         title: "APPLICATION ERROR!",
                         icon: "error",
-                        text: `${firstName} ${middleName} ${lastName}'s are updated.`
+                        text: `${firstName} ${middleName} ${lastName}'s are updated already.`
                     });
     
                     finalVerification();
@@ -289,6 +289,7 @@ const finalVerification = (page) => {
                         icon: "error",
                         text: "Something went wrong. Please try again later"
                     })
+                    finalVerification();
                 }
 
             });

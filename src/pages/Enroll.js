@@ -49,7 +49,7 @@ export default function Enroll(){
     function enroll(e){
         e.preventDefault();
 
-        if(firstName === "" || lastName === "" || DOB === "" || address === "" || mobileNumber === "" || socialMedia === "" || presentSchool === "" || parent === "" || parentNumber === "" || selectGrade === ""){
+        if((firstName === "" || lastName === "" || DOB === "" || address === "" || mobileNumber === "" || socialMedia === "" || presentSchool === "" || parent === "" || parentNumber === "" || selectGrade === "") || (selectGrade >= 1 && LRN === "") ){
         
             Swal.fire({
                 title: "PLEASE FILL ALL REQUIRED FIELDS",

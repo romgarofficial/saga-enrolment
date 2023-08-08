@@ -16,7 +16,9 @@ export default function AppNavbar(){
   return (
     <Navbar bg="dark" sticky="top" data-bs-theme="dark" expand="lg" className="navbar nav-btm-border p-2 shadow nav-btm-border ">
       <Container className="container-fluid ">
-        <Image src={Logo} as={NavLink} to="/" className="nav-logo img-fluid nav-logo bg-light rounded-circle p-1 me-2" />
+      <NavLink to="/" className="nav-logo bg-light rounded-circle p-1 me-2">
+        <Image src={Logo} className="img-fluid" alt="Logo" />
+      </NavLink>
         <Navbar.Brand as={NavLink} to="/" className="nav-logo-name text-light d-none d-lg-inline-block"> St. Aloysius Gonzaga Academy, Inc</Navbar.Brand>
         <Navbar.Brand as={NavLink} to="/" className="nav-logo-name text-light d-inline-block d-lg-none"> SAGA</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
