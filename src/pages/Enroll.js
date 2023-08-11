@@ -114,6 +114,7 @@ export default function Enroll(){
                 setLRN("");
                 setPresentSchool("");
                 setParent("");
+                setEmail("");
                 setParentNumber("");
                 setMedicalCondition("");
                 setSelectGrade("");
