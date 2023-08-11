@@ -6,7 +6,7 @@ import Logo from "../images/logo.png";
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2"
-const nodemailer = require('nodemailer');
+
 import Banner from "../components/Banner.js"
 
 export default function Enroll(){
@@ -34,7 +34,7 @@ export default function Enroll(){
     const [email, setEmail] = useState("");
     console.log(fullName);
 
-
+    const sender_email = "romgarofficial@gmail.com";
 
     useEffect(() => {
         if (selectGrade === 0) {
@@ -49,33 +49,7 @@ export default function Enroll(){
     })
 
 
-    function mail(enrol_email){
-            // Create a transporter using Gmail SMTP with App Password
-            const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'your_email@gmail.com',           // Your Gmail email address
-                pass: 'your_generated_app_password',    // Generated App Password
-            },
-            });
-
-            // Email details
-            const mailOptions = {
-            from: 'your_email@gmail.com',   // Sender email address
-            to: 'recipient@example.com',    // Recipient email address
-            subject: 'Testing Nodemailer',  // Subject of the email
-            text: 'Hello from Nodemailer!', // Plain text body
-            };
-
-            // Send the email
-            transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log('Error:', error);
-            } else {
-                console.log('Email sent:', info.response);
-            }
-            });
-    }
+    
 
     function enroll(e){
         e.preventDefault();
@@ -100,6 +74,7 @@ export default function Enroll(){
                 firstName: firstName,
                 middleName: middleName,
                 lastName: lastName,
+                email:email,
                 gender: gender,
                 lrn: LRN,
                 birthDate: DOB,
@@ -117,6 +92,7 @@ export default function Enroll(){
         .then(res => res.json())
         .then(data => {
             console.log(data);
+
 
             if(data == "1"){
                 Swal.fire({
