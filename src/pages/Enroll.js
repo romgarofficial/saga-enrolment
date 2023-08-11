@@ -6,6 +6,7 @@ import Logo from "../images/logo.png";
 import { useState, useEffect } from "react";
 import { Navigate, useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2"
+const nodemailer = require('nodemailer');
 import Banner from "../components/Banner.js"
 
 export default function Enroll(){
@@ -30,6 +31,7 @@ export default function Enroll(){
     const [parentNumber, setParentNumber] = useState("");
     const [medicalCondition, setMedicalCondition] = useState("");
     const [selectGrade, setSelectGrade] = useState("");
+    const [email, setEmail] = useState("");
     console.log(fullName);
 
 
@@ -45,6 +47,35 @@ export default function Enroll(){
     useEffect(() => {
         document.title = 'SAGA - Enrolment';
     })
+
+
+    function mail(enrol_email){
+            // Create a transporter using Gmail SMTP with App Password
+            const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'your_email@gmail.com',           // Your Gmail email address
+                pass: 'your_generated_app_password',    // Generated App Password
+            },
+            });
+
+            // Email details
+            const mailOptions = {
+            from: 'your_email@gmail.com',   // Sender email address
+            to: 'recipient@example.com',    // Recipient email address
+            subject: 'Testing Nodemailer',  // Subject of the email
+            text: 'Hello from Nodemailer!', // Plain text body
+            };
+
+            // Send the email
+            transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error:', error);
+            } else {
+                console.log('Email sent:', info.response);
+            }
+            });
+    }
 
     function enroll(e){
         e.preventDefault();
@@ -179,6 +210,8 @@ export default function Enroll(){
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Middle Name" variant="outlined" value={middleName} type="text"  onChange={e => setMiddleName(e.target.value.toUpperCase())}/>
 
                     <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Last Name" variant="outlined" type="text" required value={lastName} onChange={e => setLastName(e.target.value.toUpperCase())}/>
+
+                    <TextField size="small" className="my-2 w-100" id="outlined-basic" label="Email Address" variant="outlined" type="email" required value={email} onChange={e => setEmail(e.target.value.toUpperCase())}/>
 
                     <FormControl className="w-100 my-1">
                     
